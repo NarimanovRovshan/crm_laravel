@@ -22,5 +22,6 @@
 		</tr>
 		@endforeach
 	</table>
+	<p><a href="{{ route('clients.create') }}">← Добавить клиента</a></p>
 </body>
 </html>
