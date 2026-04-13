@@ -36,4 +36,31 @@ class ClientController extends Controller
 		// 3. Редирект обратно на список с сообщением успеха
 		return redirect()->route('clients.index')->with('success','Клиент успешно добавлен!');
 	}
+
+	// 1. Показать форму с данными клиента
+	public function edit($id)
+	{
+		//Находим клиента, если нет - ошибка 404
+		$client = client::findOrFail($id);
+		return view('clients.edit', compact('client'));
+	}
+	
+	// 2. Обработать сохранение
+	public function update(Request $request, $id)
+	{
+		$client = Client::findOrFail($id);
+		
+		// Валидаци (почти такая же, как при создании, но email может быть тот же)
+		$validated = $request->validate([
+			'name' => 'required|string|max:255',
+			'email' => 'required|email|unique:clients,email,' . $client->id, // Исключаем текущего клиента
+			'phone' => 'nullable|string',
+			'balance' => 'required|integer|min:0',
+	]);
+	
+	// обновляем данные
+	$client->update($validated);
+	
+	return redirect()->route('clients.index')->with('success', 'Клиент обнавлён!');
+	}
 }

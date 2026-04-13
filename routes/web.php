@@ -15,3 +15,9 @@ Route::get('/clients/create', [ClientController::class, 'create'])->name('client
 
 //Обработать отправку формы
 Route::post('/clients', [ClientController::class, 'store'])->name('clients.store');
+
+// Показать форму редактирования
+Route::get('/clients/{id}/edit', [ClientController::class, 'edit'])->name('clients.edit');
+
+// Обновить данные (метод PUT)
+Route::put('clients/{id}', [ClientController::class, 'update'])->name('clients.update');

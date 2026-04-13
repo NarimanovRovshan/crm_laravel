@@ -12,6 +12,7 @@
 			<th>Email</th>
 			<th>Телефон</th>
 			<th>Баланс</th>
+			<th>Действие</th>
 		</tr>
 		@foreach($clients as $client)
 		<tr>
@@ -19,6 +20,7 @@
 			<th>{{ $client->email }}</th>
 			<th>{{ $client->phone }}</th>
 			<th>{{ $client->balance }}</th>
+			<th><a href="{{ route('clients.edit', $client->id) }}">✏️ Изменить</a></th>
 		</tr>
 		@endforeach
 	</table>
