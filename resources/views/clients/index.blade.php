@@ -16,11 +16,20 @@
 		</tr>
 		@foreach($clients as $client)
 		<tr>
-			<th>{{ $client->name }}</th>
-			<th>{{ $client->email }}</th>
-			<th>{{ $client->phone }}</th>
-			<th>{{ $client->balance }}</th>
-			<th><a href="{{ route('clients.edit', $client->id) }}">✏️ Изменить</a></th>
+			<td>{{ $client->name }}</td>
+			<td>{{ $client->email }}</td>
+			<td>{{ $client->phone }}</td>
+			<td>{{ $client->balance }}</td>
+			<td>
+				<a href="{{ route('clients.edit', $client->id) }}" style=" text-decoration: none; color: blue; display: inline;">✏️ Изменить</a>
+				
+				{{-- Форма для удаления --}}
+				<form action="{{ route('clients.destroy', $client->id) }}" method="POST" style="color: red; display: inline;">
+					@csrf
+					@method('DELETE') {{-- Магия Laravel: меняем POST на DELETE --}}
+					<button type="submit" onclick = "return confirm('Точно удалить клиента {{ $client->name }}?');" style="color: red; border: none; background: none; cursor: pointer;"> 🗑️ Удалить </button>
+				</form>
+			</td>
 		</tr>
 		@endforeach
 	</table>

@@ -58,9 +58,22 @@ class ClientController extends Controller
 			'balance' => 'required|integer|min:0',
 	]);
 	
-	// обновляем данные
-	$client->update($validated);
+		// обновляем данные
+		$client->update($validated);
 	
-	return redirect()->route('clients.index')->with('success', 'Клиент обнавлён!');
+		return redirect()->route('clients.index')->with('success', 'Клиент обнавлён!');
+	}
+	
+	public function destroy($id)
+	{
+		// 1. Находим клиента (если нет - ошибка 404)
+		$client = Client::findOrFail($id);
+		
+		// 2. Удаляем запись из БД
+		$client->delete();
+		
+		//3. Возвращаемся на список с сообщением
+		return redirect()->route('clients.index')->with('success', 'Клиент удалён!');
 	}
 }
+?>
