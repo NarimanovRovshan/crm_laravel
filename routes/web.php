@@ -25,4 +25,7 @@ Route::put('clients/{id}', [ClientController::class, 'update'])->name('clients.u
 // Удаление Клиента
 Route::delete('/clients/{id}', [ClientController::class, 'destroy'])->name('clients.destroy');
 
+// Маршрут для звонка (GET, так как мы просто инициируем действие)
+Route::get('/ckients/{id}/call', [ClientController::class, 'callClient'])->name('clients.call');
+
 ?>

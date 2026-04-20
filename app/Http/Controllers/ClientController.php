@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use App\Models\Client;
 
@@ -75,5 +76,40 @@ class ClientController extends Controller
 		//3. Возвращаемся на список с сообщением
 		return redirect()->route('clients.index')->with('success', 'Клиент удалён!');
 	}
+
+public function callClient($id)
+{
+    $client = Client::findOrFail($id);
+
+    if (empty($client->phone)) {
+        return back()->with('error', 'У клиента нет номера телефона!');
+    }
+
+    // Отправляем запрос с отключенной проверкой SSL (для локалки)
+    $response = Http::withOptions(['verify' => false])->post(
+        'https://app.mango-office.ru/vpbx/v1/request/call_initiator.json',
+        [
+            'key'       => env('MANGO_API_KEY'),
+            'initiator' => env('MANGO_INITIATOR'),
+            'abonent'   => $client->phone,
+            'record'    => true,
+        ]
+    );
+
+    // 🔍 ОТЛАДКА: Получаем сырой ответ
+    $data = $response->json();
+    $status = $response->status();
+
+    // 🔍 ОТЛАДКА: Выводим всё на экран (временно!)
+    return response()->json([
+        'http_status' => $status,
+        'mango_response' => $data,
+        'request_data' => [
+            'key' => substr(env('MANGO_API_KEY'), 0, 10) . '...', // Показываем только начало ключа
+            'initiator' => env('MANGO_INITIATOR'),
+            'abonent' => $client->phone,
+        ]
+    ]);
+}
 }
 ?>
