@@ -5,6 +5,13 @@
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2> Клиенты</h2>
+		<form method="GET" action="{{ route('clients.index') }}" class="d-flex gap-2 mb-3">
+			<input type="text" name="search" class="form-control" placeholder="Поиск по имени или телефону..." value"{{ request('search') }}">
+			<button type="submit" class="btn btn-outline-secondary">Найти</button>
+			@if(request('search'))
+				<a href="{{ route('clients.index') }}" class="btn btn-link">✖ Сбросить</a>
+			@endif
+		</form>
         <a href="{{ route('clients.create') }}" class="btn btn-primary">➕ Добавить клиента</a>
     </div>
 

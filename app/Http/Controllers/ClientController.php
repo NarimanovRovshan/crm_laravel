@@ -9,9 +9,15 @@ use App\Models\Client;
 
 class ClientController extends Controller
 {	
-	public function index(){
-		$clients = Client::all();
-		return view('clients.index', compact('clients'));
+	public function index(Request $request){
+		$query = Client::query();
+		
+		if ($request->filled('search')) {
+			$search = $request->search;
+			$query->where('name', 'like', "%{$search}%")->orWhere('phone', 'like', "%{$search}%");
+		}
+		
+		return view('clients.index', ['clients' => $query->latest()->get()]);
 	}
 	
 	public function create()
